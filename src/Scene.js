@@ -16,7 +16,9 @@ const Scene = () => {
       MouseConstraint = Matter.MouseConstraint;
 
     const engine = Engine.create({
-      // positionIterations: 20
+      // the higher the value, the higher quality the simulation will be at the expense of performance
+      positionIterations: 10, // default: 6
+      velocityIterations: 10, // default: 4
     });
 
     const render = Render.create({
@@ -30,8 +32,8 @@ const Scene = () => {
     });
 
     // balls
-    const ballA = Bodies.circle(0, 0, 30, { restitution: 0.5 });
-    const ballB = Bodies.circle(800, 0, 30, { restitution: 0.5 });
+    const ball = Bodies.circle(0, 0, 30, { restitution: 0.5 });
+    const square = Bodies.rectangle(900, 50, 40, 40, { restitution: 0.7 });
 
     World.add(engine.world, [
       // top wall
@@ -46,7 +48,7 @@ const Scene = () => {
       Bodies.rectangle(1600, 0, 50, 2000, { isStatic: true }),
     ]);
 
-    World.add(engine.world, [ballA, ballB]);
+    World.add(engine.world, [ball, square]);
 
     // add mouse control
     const mouse = Mouse.create(render.canvas),
@@ -63,8 +65,11 @@ const Scene = () => {
     World.add(engine.world, mouseConstraint);
 
     Matter.Events.on(mouseConstraint, "mousedown", function (event) {
+      // add circles on click
       World.add(engine.world, Bodies.circle(100, 50, 30, { restitution: 0.7 }));
-      World.add(engine.world, Bodies.circle(900, 50, 30, { restitution: 0.7 }));
+
+      // add squares on click
+      World.add(engine.world, Bodies.rectangle(900, 50, 40, 40, { restitution: 0.7 }));
     });
 
     Engine.run(engine);
