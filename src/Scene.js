@@ -31,6 +31,12 @@ const Scene = () => {
       },
     });
 
+    // fit the render viewport to the scene
+    Render.lookAt(render, {
+      min: { x: 0, y: 0 },
+      max: { x: 1600, y: 800 },
+    });
+
     // balls
     const ball = Bodies.circle(0, 0, 30, { restitution: 0.5 });
     const square = Bodies.rectangle(900, 50, 40, 40, { restitution: 0.7 });
